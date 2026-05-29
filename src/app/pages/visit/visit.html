@@ -1,0 +1,115 @@
+<div class="mx-auto max-w-lg px-4 pt-4 pb-24 sm:px-5 sm:pt-6">
+  <div class="mb-6 flex items-center gap-3">
+    <a
+      routerLink="/planner"
+      class="flex h-8 w-8 items-center justify-center rounded-lg text-black transition hover:bg-gray-100 hover:text-gray-900 bg-primary-200"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <h1 class="text-md font-bold text-gray-900 sm:text-xl">Visit Form</h1>
+  </div>
+
+  <form [formGroup]="visitForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Follow Up Date
+      </label>
+      <input
+        type="date"
+        formControlName="followUpDate"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        [class.border-red-400]="
+          visitForm.get('followUpDate')?.invalid && visitForm.get('followUpDate')?.touched
+        "
+      />
+      @if (visitForm.get('followUpDate')?.invalid && visitForm.get('followUpDate')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Follow up date is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Purpose
+      </label>
+      <input
+        type="text"
+        formControlName="purpose"
+        placeholder="e.g. Site inspection, Follow-up visit"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        [class.border-red-400]="
+          visitForm.get('purpose')?.invalid && visitForm.get('purpose')?.touched
+        "
+      />
+      @if (visitForm.get('purpose')?.invalid && visitForm.get('purpose')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Purpose is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Comment
+      </label>
+      <textarea
+        formControlName="comment"
+        rows="4"
+        placeholder="Enter your comments..."
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100 resize-none"
+        [class.border-red-400]="
+          visitForm.get('comment')?.invalid && visitForm.get('comment')?.touched
+        "
+      ></textarea>
+      @if (visitForm.get('comment')?.invalid && visitForm.get('comment')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Comment is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Photo
+      </label>
+      <label
+        class="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-white p-6 transition hover:border-primary-400 hover:bg-primary-50"
+      >
+        @if (photoPreview) {
+          <img [src]="photoPreview" alt="Photo preview" class="max-h-48 rounded-lg object-cover" />
+        } @else {
+          <svg
+            class="mb-2 h-8 w-8 text-muted"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+            />
+          </svg>
+          <p class="text-sm text-muted">Tap to upload a photo</p>
+        }
+        <input type="file" accept="image/*" (change)="onPhotoSelected($event)" class="hidden" />
+      </label>
+      @if (visitForm.get('photo')?.invalid && visitForm.get('photo')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Photo is required</p>
+      }
+    </div>
+
+    <button
+      type="submit"
+      class="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition active:scale-[0.99] hover:from-emerald-600 hover:to-emerald-700"
+    >
+      Submit Visit
+    </button>
+  </form>
+</div>

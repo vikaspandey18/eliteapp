@@ -1,0 +1,103 @@
+<div class="mx-auto max-w-lg px-4 pt-4 pb-24 sm:px-5 sm:pt-6">
+  <div class="mb-6 flex items-center gap-3">
+    <a
+      routerLink="/planner"
+      class="flex h-8 w-8 items-center justify-center rounded-lg text-black transition hover:bg-gray-100 hover:text-gray-900 bg-primary-200"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <h1 class="text-md font-bold text-gray-900 sm:text-xl">Collection Form</h1>
+  </div>
+
+  <form [formGroup]="collectionForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Amount
+      </label>
+      <input
+        type="number"
+        formControlName="amount"
+        placeholder="0.00"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        [class.border-red-400]="
+          collectionForm.get('amount')?.invalid && collectionForm.get('amount')?.touched
+        "
+      />
+      @if (collectionForm.get('amount')?.invalid && collectionForm.get('amount')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Valid amount is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Receipt No
+      </label>
+      <input
+        type="text"
+        formControlName="receiptNo"
+        placeholder="e.g. RCP-001"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        [class.border-red-400]="
+          collectionForm.get('receiptNo')?.invalid && collectionForm.get('receiptNo')?.touched
+        "
+      />
+      @if (collectionForm.get('receiptNo')?.invalid && collectionForm.get('receiptNo')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Receipt number is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Follow Up Date
+      </label>
+      <input
+        type="date"
+        formControlName="followUpDate"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        [class.border-red-400]="
+          collectionForm.get('followUpDate')?.invalid && collectionForm.get('followUpDate')?.touched
+        "
+      />
+      @if (
+        collectionForm.get('followUpDate')?.invalid && collectionForm.get('followUpDate')?.touched
+      ) {
+        <p class="mt-1 text-xs text-red-500">Follow up date is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Comment
+      </label>
+      <textarea
+        formControlName="comment"
+        rows="4"
+        placeholder="Enter your comments..."
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100 resize-none"
+        [class.border-red-400]="
+          collectionForm.get('comment')?.invalid && collectionForm.get('comment')?.touched
+        "
+      ></textarea>
+      @if (collectionForm.get('comment')?.invalid && collectionForm.get('comment')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Comment is required</p>
+      }
+    </div>
+
+    <button
+      type="submit"
+      class="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition active:scale-[0.99] hover:from-emerald-600 hover:to-emerald-700"
+    >
+      Submit Collection
+    </button>
+  </form>
+</div>
