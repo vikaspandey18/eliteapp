@@ -1,6 +1,6 @@
 export interface CustomerModel {
   id?: string;
-  customerName?: string;
+  customerName: string;
   customerContact?: string;
   customerAddress?: string;
   State?: string;
