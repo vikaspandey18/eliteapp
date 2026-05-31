@@ -1,5 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '../../../models/api.response.model';
+import { CustomerModel } from '../../../models/customer.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -7,5 +11,8 @@ import { inject, Injectable } from '@angular/core';
 export class Customer {
   private http = inject(HttpClient);
 
-  
+  getCustomer(): Observable<ApiResponse<CustomerModel[]>> {
+    const url = `${environment.apiUrl}/customer/getCustomer.php`;
+    return this.http.get<ApiResponse<CustomerModel[]>>(url);
+  }
 }
