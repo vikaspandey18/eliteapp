@@ -38,6 +38,8 @@ export class Customer implements OnInit {
   private searchSubject = new BehaviorSubject<string>('');
 
   ngOnInit(): void {
+    this.store.dispatch(loadCustomers());
+
     this.customer$ = this.store.select(selectCustomers);
 
     this.loading$ = this.store.select(selectCustomerLoading);
@@ -74,7 +76,6 @@ export class Customer implements OnInit {
   }
 
   getInitials(name: string): string {
-    return name?.substring(0,2).toUpperCase() || "UN";
+    return name?.substring(0, 2).toUpperCase() || 'UN';
   }
-
 }
