@@ -16,16 +16,16 @@ export const loadCustomersFailure = createAction(
 
 // Add Planner
 export const addCustomerPlanner = createAction(
-  '[Customer] Add Planner',
+  '[customer] Add Planner',
   props<{ customerId: string }>(),
 );
 
 export const addCustomerPlannerSuccess = createAction(
-  '[Customer] Add Planner Success',
+  '[customer] Add Planner Success',
   props<{ response: ApiResponse<null> }>(),
 );
 
 export const addCustomerPlannerFailure = createAction(
-  '[Customer] Add Planner Failure',
+  '[customer] Add Planner Failure',
   props<{ error: string }>(),
 );
