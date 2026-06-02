@@ -78,4 +78,8 @@ export class Customer implements OnInit {
   getInitials(name: string): string {
     return name?.substring(0, 2).toUpperCase() || 'UN';
   }
+
+  addPlanner(id: string) {
+    alert(id);
+  }
 }
