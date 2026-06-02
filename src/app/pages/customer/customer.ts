@@ -14,6 +14,7 @@ import {
   selectCustomerMessage,
   selectCustomers,
 } from './state/customer.selectors';
+import { loadCustomers } from './state/customer.actions';
 
 @Component({
   selector: 'app-customer',
@@ -37,6 +38,8 @@ export class Customer implements OnInit {
   private searchSubject = new BehaviorSubject<string>('');
 
   ngOnInit(): void {
+    this.store.dispatch(loadCustomers());
+
     this.customer$ = this.store.select(selectCustomers);
 
     this.loading$ = this.store.select(selectCustomerLoading);
