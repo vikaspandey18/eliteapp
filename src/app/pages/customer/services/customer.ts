@@ -15,4 +15,9 @@ export class Customer {
     const url = `${environment.apiUrl}/customer/getCustomer.php`;
     return this.http.get<ApiResponse<CustomerModel[]>>(url);
   }
+
+  addCustomerToPlanner(id: string): Observable<ApiResponse<null>> {
+    const url = `${environment.apiUrl}/planner/addPlanner.php`;
+    return this.http.post<ApiResponse<null>>(url, { customerId: id });
+  }
 }
