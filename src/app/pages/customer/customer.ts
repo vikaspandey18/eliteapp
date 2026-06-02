@@ -14,7 +14,7 @@ import {
   selectCustomerMessage,
   selectCustomers,
 } from './state/customer.selectors';
-import { loadCustomers } from './state/customer.actions';
+import { addCustomerPlanner, loadCustomers } from './state/customer.actions';
 
 @Component({
   selector: 'app-customer',
@@ -80,6 +80,10 @@ export class Customer implements OnInit {
   }
 
   addPlanner(id: string) {
-    alert(id);
+    this.store.dispatch(
+      addCustomerPlanner({
+        customerId: id,
+      }),
+    );
   }
 }

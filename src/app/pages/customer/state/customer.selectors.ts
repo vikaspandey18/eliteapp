@@ -28,3 +28,18 @@ export const selectCustomerLoading = createSelector(selectCustomerState, (state)
 export const selectCustomerError = createSelector(selectCustomerState, (state) => {
   return state.error;
 });
+
+export const selectPlannerResponse = createSelector(
+  selectCustomerState,
+  (state) => state.plannerResponse,
+);
+
+export const selectPlannerMessage = createSelector(
+  selectCustomerState,
+  (state) => state.plannerResponse?.message ?? '',
+);
+
+export const selectPlannerStatus = createSelector(
+  selectCustomerState,
+  (state) => state.plannerResponse?.status ?? '',
+);

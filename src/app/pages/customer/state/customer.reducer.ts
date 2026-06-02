@@ -1,6 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
 import { initialState } from './customer.state';
-import { loadCustomers, loadCustomersFailure, loadCustomersSuccess } from './customer.actions';
+import {
+  addCustomerPlanner,
+  addCustomerPlannerFailure,
+  addCustomerPlannerSuccess,
+  loadCustomers,
+  loadCustomersFailure,
+  loadCustomersSuccess,
+} from './customer.actions';
 
 export const customerReducer = createReducer(
   initialState,
@@ -25,4 +32,23 @@ export const customerReducer = createReducer(
       error: action.error,
     };
   }),
+
+  // Add Planner
+  on(addCustomerPlanner, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(addCustomerPlannerSuccess, (state, { response }) => ({
+    ...state,
+    loading: false,
+    plannerResponse: response,
+  })),
+
+  on(addCustomerPlannerFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
 );

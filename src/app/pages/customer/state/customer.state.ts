@@ -3,12 +3,14 @@ import { CustomerModel } from '../../../models/customer.model';
 
 export interface CustomerState {
   customers: ApiResponse<CustomerModel[]> | null;
+  plannerResponse: ApiResponse<null> | null;
   loading: boolean;
   error: string | null;
 }
 
 export const initialState: CustomerState = {
   customers: null,
+  plannerResponse: null,
   loading: false,
   error: null,
 };
