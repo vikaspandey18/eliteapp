@@ -10,7 +10,7 @@ export const loadCustomersSuccess = createAction(
 );
 
 export const loadCustomersFailure = createAction(
-  '[Customer] Load Customers Failure',
+  '[customer] Load Customers Failure',
   props<{ error: string }>(),
 );
 
