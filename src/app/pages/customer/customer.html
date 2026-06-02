@@ -55,7 +55,7 @@
 
   <div class="space-y-2.5 sm:space-y-3">
     @if (filteredCustomers$ | async; as customers) {
-      @for (customer of customers; track customer.id) {
+      @for (customer of customers; track customer.customerId) {
         <div class="rounded-xl border border-gray-100 bg-white shadow-sm">
           <div class="flex items-center justify-between px-3.5 py-3.5 sm:px-4 sm:py-4">
             <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
