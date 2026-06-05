@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  
   userName = 'Vikas Sharma';
   userAddress = '123 Elite Street, New York, NY 10001';
   checkedIn = false;
