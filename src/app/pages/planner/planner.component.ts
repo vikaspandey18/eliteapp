@@ -11,10 +11,11 @@ import {
   selectPlannerLoading,
   selectPlannerMessage,
 } from './state/planner.selectors';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-planner',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, AsyncPipe],
   templateUrl: './planner.component.html',
 })
 export class PlannerComponent {

@@ -1,59 +1,93 @@
 <div class="mx-auto max-w-lg px-4 pt-4 pb-24 sm:px-5 sm:pt-6">
   <div class="mb-5 flex items-center justify-between sm:mb-6">
     <div class="flex items-center gap-3">
-      <a routerLink="/"
-        class="flex h-8 w-8 items-center justify-center rounded-lg text-black transition hover:bg-gray-100 hover:text-gray-900 bg-primary-200">
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <a
+        routerLink="/"
+        class="flex h-8 w-8 items-center justify-center rounded-lg text-black transition hover:bg-gray-100 hover:text-gray-900 bg-primary-200"
+      >
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
       </a>
       <div>
         <h1 class="text-md font-bold text-gray-900 sm:text-xl">Planner</h1>
-
       </div>
     </div>
     <p class="mt-0.5 text-xs text-muted sm:mt-1 sm:text-sm">
-      {{ filteredCustomers.length }} client{{ filteredCustomers.length !== 1 ? 's' : '' }}
+      @if (filteredCustomers$ | async; as customers) {
+        {{ customers.length }} client{{ customers.length !== 1 ? 's' : '' }}
+      }
     </p>
   </div>
 
   <div class="relative mb-4">
-    <svg class="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" fill="none" viewBox="0 0 24 24"
-      stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    <svg
+      class="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
     </svg>
-    <input type="text" [(ngModel)]="searchQuery" placeholder="Search customers..."
-      class="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100" />
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (ngModelChange)="onSearch($event)"
+      placeholder="Search customers..."
+      class="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:bg-white focus:ring-2 focus:ring-primary-100"
+    />
   </div>
 
-  @if (filteredCustomers.length === 0) {
-  <p class="py-8 text-center text-sm text-muted">No customers found</p>
+  @if ((filteredCustomers$ | async)?.length === 0) {
+    <p class="py-8 text-center text-sm text-muted">No customers found</p>
   }
 
   <div class="space-y-2.5 sm:space-y-3">
-    @for (customer of filteredCustomers; track customer.id) {
-    <div class="rounded-xl border border-gray-100 bg-white shadow-sm">
-      <div class="flex items-center justify-between px-3.5 py-3.5 sm:px-4 sm:py-4">
-        <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
-          <div
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700 sm:h-10 sm:w-10 sm:text-sm">
-            {{ getInitials(customer.name) }}
-          </div>
-          <div class="min-w-0">
-            <p class="truncate text-sm font-semibold text-gray-900 sm:text-sm">
-              {{ customer.name }}
-            </p>
-            <p class="truncate text-xs text-muted">{{ customer.email }}</p>
+    @if (filteredCustomers$ | async; as customers) {
+      @for (customer of customers; track customer.customerId) {
+        <div class="rounded-xl border border-gray-100 bg-white shadow-sm">
+          <div class="flex items-center justify-between px-3.5 py-3.5 sm:px-4 sm:py-4">
+            <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+              <div
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700 sm:h-10 sm:w-10 sm:text-sm"
+              >
+                {{ getInitials(customer.customerName) }}
+              </div>
+              <div class="min-w-0">
+                <p class="truncate text-sm font-semibold text-gray-900 sm:text-sm">
+                  {{ customer.customerName }}
+                </p>
+                <p class="truncate text-xs text-muted">{{ customer.customerContact }}</p>
+              </div>
+            </div>
+            <a
+              routerLink="/planner/menu"
+              class="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-muted transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </a>
           </div>
         </div>
-        <a routerLink="/planner/menu"
-          class="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-muted transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-        </a>
-      </div>
-    </div>
+      }
     }
   </div>
 </div>
