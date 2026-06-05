@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'https://elite.shahtechnologies.net/appApi',
+  apiUrl: 'https://rushabh.vizitlog.com/elite_api',
 };
