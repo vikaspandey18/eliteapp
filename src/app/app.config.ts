@@ -16,5 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects(AppEffect),
     provideRouterStore(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideToastr(),
   ],
 };
