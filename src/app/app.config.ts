@@ -7,6 +7,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { AppEffect, AppReducer } from './store/app.state';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideNgToast } from 'ng-angular-popup';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,14 @@ export const appConfig: ApplicationConfig = {
     provideEffects(AppEffect),
     provideRouterStore(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideToastr(),
+    provideNgToast({
+      duration: 5000, // Default 5 seconds
+      maxToasts: 3, // Max 3 toasts at once
+      width: 400, // Toast width in pixels
+      showProgress: true, // Show progress bar
+      dismissible: true, // Allow manual dismiss
+      showIcon: true, // Show icons
+      enableAnimations: true,
+    }),
   ],
 };
