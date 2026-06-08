@@ -56,7 +56,10 @@
   <div class="space-y-2.5 sm:space-y-3">
     @if (filteredCustomers$ | async; as customers) {
       @for (customer of customers; track customer.customerId) {
-        <div class="rounded-xl border border-gray-100 bg-white shadow-sm">
+        <div
+          class="rounded-xl border border-gray-100 shadow-sm"
+          [ngClass]="customer.visit_type === 'visit' ? 'bg-green-100' : 'bg-white'"
+        >
           <div class="flex items-center justify-between px-3.5 py-3.5 sm:px-4 sm:py-4">
             <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
               <div
@@ -75,6 +78,7 @@
               [routerLink]="['/planner/menu', customer.customerId]"
               class="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-muted transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
             >
+              <!-- Right Arrow Icon -->
               <svg
                 class="h-4 w-4"
                 fill="none"
@@ -82,7 +86,7 @@
                 stroke="currentColor"
                 stroke-width="2.5"
               >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </a>
           </div>

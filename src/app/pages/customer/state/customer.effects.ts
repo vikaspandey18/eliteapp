@@ -9,12 +9,14 @@ import {
   loadCustomersFailure,
   loadCustomersSuccess,
 } from './customer.actions';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { NgToastService } from 'ng-angular-popup';
 
 @Injectable()
 export class CustomerEffect {
   private actions$ = inject(Actions);
   private customerService = inject(Customer);
+  private toast = inject(NgToastService);
 
   loadCustomer$ = createEffect(() => {
     return this.actions$.pipe(
@@ -47,4 +49,30 @@ export class CustomerEffect {
       }),
     );
   });
+
+  addCustomerPlannerSuccessToast$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(addCustomerPlannerSuccess),
+        tap(({ response }) => {
+          if (+response.status === 200) {
+            this.toast.success(response.message || 'Planner added successfully', 'Success');
+          } else {
+            this.toast.danger(response.message || 'Failed to add planner', 'Error');
+          }
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  addCustomerPlannerFailureToast$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(addCustomerPlannerFailure),
+        tap(({ error }) => {
+          this.toast.danger(error || 'Failed to add planner', 'Error');
+        }),
+      ),
+    { dispatch: false },
+  );
 }

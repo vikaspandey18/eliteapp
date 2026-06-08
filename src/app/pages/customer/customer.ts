@@ -4,18 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, take } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 
 import { CustomerModel } from '../../models/customer.model';
-import { NgToastComponent, NgToastService, TOAST_POSITIONS, ToastPosition } from 'ng-angular-popup';
+import { NgToastComponent, NgToastService, TOAST_POSITIONS } from 'ng-angular-popup';
 
 import {
   selectCustomerError,
   selectCustomerLoading,
   selectCustomerMessage,
   selectCustomers,
-  selectPlannerMessage,
-  selectPlannerStatus,
 } from './state/customer.selectors';
 import { addCustomerPlanner, loadCustomers } from './state/customer.actions';
 
@@ -54,10 +52,6 @@ export class Customer implements OnInit {
     this.loading$ = this.store.select(selectCustomerLoading);
     this.error$ = this.store.select(selectCustomerError);
     this.message$ = this.store.select(selectCustomerMessage);
-
-    this.plannerStatus$ = this.store.select(selectPlannerStatus);
-
-    this.plannerMessage$ = this.store.select(selectPlannerMessage);
 
     this.filteredCustomers$ = combineLatest([
       this.customer$,
@@ -98,15 +92,5 @@ export class Customer implements OnInit {
         customerId: id,
       }),
     );
-
-    combineLatest([this.plannerStatus$, this.plannerMessage$])
-      .pipe(take(1))
-      .subscribe(([status, message]) => {
-        if (+status === 200) {
-          this.toast.success(message || 'Planner added successfully', 'Success');
-        } else {
-          this.toast.danger(message || 'Failed', 'Error');
-        }
-      });
   }
 }
