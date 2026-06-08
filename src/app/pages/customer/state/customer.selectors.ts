@@ -1,5 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector, State } from '@ngrx/store';
 import { CustomerState } from './customer.state';
+import { selectRouterParam } from '../../../store/router/router.selectors';
 
 export const selectCustomerState = createFeatureSelector<CustomerState>('customer');
 
@@ -42,4 +43,14 @@ export const selectPlannerMessage = createSelector(
 export const selectPlannerStatus = createSelector(
   selectCustomerState,
   (state) => state.plannerResponse?.status ?? '',
+);
+
+//Fetch single customer based on the id
+export const selectCustomerFromRoute = createSelector(
+  selectCustomers,
+  selectRouterParam,
+  (customers, params) => {
+    const id = params['id'];
+    return customers.find((c) => c.customerId === id);
+  },
 );
