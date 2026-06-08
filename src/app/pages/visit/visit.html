@@ -16,6 +16,25 @@
       <label
         class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
       >
+        Purpose <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        formControlName="purpose"
+        placeholder="e.g. Site inspection, Follow-up visit"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        [class.border-red-400]="
+          visitForm.get('purpose')?.invalid && visitForm.get('purpose')?.touched
+        "
+      />
+      @if (visitForm.get('purpose')?.invalid && visitForm.get('purpose')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Purpose is required</p>
+      }
+    </div>
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
         Follow Up Date
       </label>
       <input
@@ -35,27 +54,7 @@
       <label
         class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
       >
-        Purpose
-      </label>
-      <input
-        type="text"
-        formControlName="purpose"
-        placeholder="e.g. Site inspection, Follow-up visit"
-        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-muted outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
-        [class.border-red-400]="
-          visitForm.get('purpose')?.invalid && visitForm.get('purpose')?.touched
-        "
-      />
-      @if (visitForm.get('purpose')?.invalid && visitForm.get('purpose')?.touched) {
-        <p class="mt-1 text-xs text-red-500">Purpose is required</p>
-      }
-    </div>
-
-    <div>
-      <label
-        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
-      >
-        Comment
+        Comment <span class="text-red-500">*</span>
       </label>
       <textarea
         formControlName="comment"
@@ -109,7 +108,7 @@
       type="submit"
       class="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition active:scale-[0.99] hover:from-emerald-600 hover:to-emerald-700"
     >
-      Submit Visit
+      Submit
     </button>
   </form>
 </div>

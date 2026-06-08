@@ -10,10 +10,10 @@ import { RouterLink } from '@angular/router';
 })
 export class Visit {
   visitForm = new FormGroup({
-    followUpDate: new FormControl('', Validators.required),
+    followUpDate: new FormControl(''),
     comment: new FormControl('', Validators.required),
     purpose: new FormControl('', Validators.required),
-    photo: new FormControl<File | null>(null, Validators.required),
+    photo: new FormControl<File | null>(null),
   });
 
   photoPreview: string | null = null;
