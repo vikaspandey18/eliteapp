@@ -8,6 +8,7 @@ import { provideRouterStore } from '@ngrx/router-store';
 import { AppEffect, AppReducer } from './store/app.state';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideNgToast } from 'ng-angular-popup';
+import { CustomSerializer } from './store/router/custom-route-serializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore(AppReducer),
     provideEffects(AppEffect),
-    provideRouterStore(),
+    provideRouterStore({
+      serializer: CustomSerializer,
+    }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideNgToast({
       duration: 5000, // Default 5 seconds
