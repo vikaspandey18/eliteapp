@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { VisitService } from './service/visit-service';
 import { finalize, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectRouterParam } from '../../store/router/router.selectors';
 
 @Component({
   selector: 'app-visit',
@@ -10,14 +12,18 @@ import { finalize, Subscription } from 'rxjs';
   templateUrl: './visit.html',
   styleUrl: './visit.css',
 })
-export class Visit {
+export class Visit implements OnInit, OnDestroy {
   private visitService = inject(VisitService);
+
+  private store = inject(Store);
 
   private subscription = new Subscription();
 
   loading = false;
 
   error: string | null = null;
+
+  customerId: string = '';
 
   visitForm = new FormGroup({
     followUpDate: new FormControl(''),
@@ -54,6 +60,7 @@ export class Visit {
     const formData = new FormData();
 
     formData.append('followUpDate', this.visitForm.value.followUpDate ?? '');
+    formData.append('customerId', this.customerId);
 
     formData.append('comment', this.visitForm.value.comment ?? '');
 
@@ -81,6 +88,17 @@ export class Visit {
           console.log(err);
           this.error = 'Failed to save visit';
         },
+      });
+
+    this.subscription.add(sub);
+  }
+
+  ngOnInit() {
+    const sub = this.store
+      .select(selectRouterParam)
+
+      .subscribe((params) => {
+        this.customerId = params['id'] ?? '';
       });
 
     this.subscription.add(sub);
