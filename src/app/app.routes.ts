@@ -29,11 +29,11 @@ export const routes: Routes = [
     component: Customer,
   },
   {
-    path: 'visit',
+    path: 'visit/:id',
     component: Visit,
   },
   {
-    path: 'collection',
+    path: 'collection/:id',
     component: Collection,
   },
 ];
