@@ -1,195 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-interface AttendanceRecord {
-  date: string;
-  day: string;
-  status: 'present' | 'absent' | 'half-day';
-  checkIn: string;
-  checkOut: string;
-}
+import { AttendanceService } from './services/attendance.service';
+import { AttendanceRecord } from '../../models/attendance.model';
 
 @Component({
   selector: 'app-attendance',
   imports: [FormsModule, DatePipe, RouterLink],
   templateUrl: './attendance.component.html',
 })
-export class AttendanceComponent {
+export class AttendanceComponent implements OnInit {
+  private attendanceService = inject(AttendanceService);
+
   fromDate: string;
   toDate: string;
 
-  records: AttendanceRecord[] = [
-    {
-      date: '2026-05-27',
-      day: 'Wednesday',
-      status: 'present',
-      checkIn: '09:15 AM',
-      checkOut: '06:10 PM',
-    },
-    {
-      date: '2026-05-26',
-      day: 'Tuesday',
-      status: 'present',
-      checkIn: '08:55 AM',
-      checkOut: '05:45 PM',
-    },
-    {
-      date: '2026-05-25',
-      day: 'Monday',
-      status: 'present',
-      checkIn: '09:00 AM',
-      checkOut: '06:00 PM',
-    },
-    { date: '2026-05-24', day: 'Sunday', status: 'absent', checkIn: '-', checkOut: '-' },
-    {
-      date: '2026-05-23',
-      day: 'Saturday',
-      status: 'half-day',
-      checkIn: '10:00 AM',
-      checkOut: '02:00 PM',
-    },
-    {
-      date: '2026-05-22',
-      day: 'Friday',
-      status: 'present',
-      checkIn: '08:45 AM',
-      checkOut: '05:30 PM',
-    },
-    {
-      date: '2026-05-21',
-      day: 'Thursday',
-      status: 'present',
-      checkIn: '09:10 AM',
-      checkOut: '06:15 PM',
-    },
-    {
-      date: '2026-05-20',
-      day: 'Wednesday',
-      status: 'present',
-      checkIn: '08:50 AM',
-      checkOut: '05:55 PM',
-    },
-    {
-      date: '2026-05-19',
-      day: 'Tuesday',
-      status: 'present',
-      checkIn: '09:05 AM',
-      checkOut: '06:05 PM',
-    },
-    {
-      date: '2026-05-18',
-      day: 'Monday',
-      status: 'present',
-      checkIn: '09:00 AM',
-      checkOut: '06:00 PM',
-    },
-    { date: '2026-05-17', day: 'Sunday', status: 'absent', checkIn: '-', checkOut: '-' },
-    { date: '2026-05-16', day: 'Saturday', status: 'absent', checkIn: '-', checkOut: '-' },
-    {
-      date: '2026-05-15',
-      day: 'Friday',
-      status: 'present',
-      checkIn: '08:55 AM',
-      checkOut: '05:40 PM',
-    },
-    {
-      date: '2026-05-14',
-      day: 'Thursday',
-      status: 'present',
-      checkIn: '09:20 AM',
-      checkOut: '06:20 PM',
-    },
-    {
-      date: '2026-05-13',
-      day: 'Wednesday',
-      status: 'half-day',
-      checkIn: '09:30 AM',
-      checkOut: '01:00 PM',
-    },
-    {
-      date: '2026-05-12',
-      day: 'Tuesday',
-      status: 'present',
-      checkIn: '08:40 AM',
-      checkOut: '06:10 PM',
-    },
-    {
-      date: '2026-05-11',
-      day: 'Monday',
-      status: 'present',
-      checkIn: '09:00 AM',
-      checkOut: '06:00 PM',
-    },
-    { date: '2026-05-10', day: 'Sunday', status: 'absent', checkIn: '-', checkOut: '-' },
-    { date: '2026-05-09', day: 'Saturday', status: 'absent', checkIn: '-', checkOut: '-' },
-    {
-      date: '2026-05-08',
-      day: 'Friday',
-      status: 'present',
-      checkIn: '09:15 AM',
-      checkOut: '05:50 PM',
-    },
-    {
-      date: '2026-05-07',
-      day: 'Thursday',
-      status: 'present',
-      checkIn: '08:50 AM',
-      checkOut: '06:00 PM',
-    },
-    {
-      date: '2026-05-06',
-      day: 'Wednesday',
-      status: 'present',
-      checkIn: '09:05 AM',
-      checkOut: '06:15 PM',
-    },
-    {
-      date: '2026-05-05',
-      day: 'Tuesday',
-      status: 'present',
-      checkIn: '09:10 AM',
-      checkOut: '05:45 PM',
-    },
-    {
-      date: '2026-05-04',
-      day: 'Monday',
-      status: 'present',
-      checkIn: '08:55 AM',
-      checkOut: '06:05 PM',
-    },
-    { date: '2026-05-03', day: 'Sunday', status: 'absent', checkIn: '-', checkOut: '-' },
-    { date: '2026-05-02', day: 'Saturday', status: 'absent', checkIn: '-', checkOut: '-' },
-    {
-      date: '2026-05-01',
-      day: 'Friday',
-      status: 'present',
-      checkIn: '09:00 AM',
-      checkOut: '06:00 PM',
-    },
-    {
-      date: '2026-04-30',
-      day: 'Thursday',
-      status: 'present',
-      checkIn: '08:45 AM',
-      checkOut: '05:55 PM',
-    },
-    {
-      date: '2026-04-29',
-      day: 'Wednesday',
-      status: 'present',
-      checkIn: '09:20 AM',
-      checkOut: '06:10 PM',
-    },
-    {
-      date: '2026-04-28',
-      day: 'Tuesday',
-      status: 'present',
-      checkIn: '09:00 AM',
-      checkOut: '06:00 PM',
-    },
-  ];
+  records: AttendanceRecord[] = [];
+  loading = false;
+  error: string | null = null;
 
   constructor() {
     const now = new Date();
@@ -198,20 +27,39 @@ export class AttendanceComponent {
     this.fromDate = this.toDateString(oneMonthAgo);
   }
 
-  get filteredRecords(): AttendanceRecord[] {
-    return this.records.filter((r) => r.date >= this.fromDate && r.date <= this.toDate);
+  ngOnInit() {
+    this.fetchAttendance();
+  }
+
+  fetchAttendance() {
+    this.loading = true;
+    this.error = null;
+    this.attendanceService.getAttendanceReport(this.fromDate, this.toDate).subscribe({
+      next: (res) => {
+        if (+res.status === 200) {
+          this.records = res.data || [];
+        } else {
+          this.error = res.message || 'Failed to fetch attendance report';
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = err?.error?.message || err?.message || 'Error loading attendance report';
+        this.loading = false;
+      }
+    });
   }
 
   get totalPresent(): number {
-    return this.filteredRecords.filter((r) => r.status === 'present').length;
+    return this.records.filter((r) => r.status === 'present').length;
   }
 
   get totalAbsent(): number {
-    return this.filteredRecords.filter((r) => r.status === 'absent').length;
+    return this.records.filter((r) => r.status === 'absent').length;
   }
 
   get totalHalfDay(): number {
-    return this.filteredRecords.filter((r) => r.status === 'half-day').length;
+    return this.records.filter((r) => r.status === 'half-day').length;
   }
 
   private toDateString(d: Date): string {
