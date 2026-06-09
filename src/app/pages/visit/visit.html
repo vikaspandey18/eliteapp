@@ -106,14 +106,14 @@
 
     <button
       type="submit"
-      [disabled]="loading"
+      [disabled]="loading$ | async"
       class="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200 transition active:scale-[0.99] hover:from-emerald-600 hover:to-emerald-700"
     >
-      {{ loading == true ? 'Saving...' : 'Submit' }}
+      {{ (loading$ | async) == true ? 'Saving...' : 'Submit' }}
     </button>
   </form>
 
-  @if (error) {
-    <p class="text-red-500">{{ error }}</p>
+  @if (error$ | async; as err) {
+    <p class="text-red-500 mt-2 text-center text-sm">{{ err }}</p>
   }
 </div>

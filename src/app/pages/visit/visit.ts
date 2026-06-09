@@ -1,27 +1,27 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { VisitService } from './service/visit-service';
-import { finalize, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectRouterParam } from '../../store/router/router.selectors';
+import { submitVisit, resetVisitStatus } from './state/visit.actions';
+import { selectVisitLoading, selectVisitError, selectVisitSuccess } from './state/visit.selectors';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-visit',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AsyncPipe],
   templateUrl: './visit.html',
   styleUrl: './visit.css',
 })
 export class Visit implements OnInit, OnDestroy {
-  private visitService = inject(VisitService);
-
   private store = inject(Store);
+  private cdr = inject(ChangeDetectorRef);
 
   private subscription = new Subscription();
 
-  loading = false;
-
-  error: string | null = null;
+  loading$ = this.store.select(selectVisitLoading);
+  error$ = this.store.select(selectVisitError);
 
   customerId: string = '';
 
@@ -42,6 +42,7 @@ export class Visit implements OnInit, OnDestroy {
       const reader = new FileReader();
       reader.onload = () => {
         this.photoPreview = reader.result as string;
+        this.cdr.detectChanges(); // Force change detection for async FileReader callback
       };
       reader.readAsDataURL(file);
     }
@@ -53,58 +54,44 @@ export class Visit implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
-
-    this.error = null;
-
-    const formData = new FormData();
-
-    formData.append('followUpDate', this.visitForm.value.followUpDate ?? '');
-    formData.append('customerId', this.customerId);
-
-    formData.append('comment', this.visitForm.value.comment ?? '');
-
-    formData.append('purpose', this.visitForm.value.purpose ?? '');
-
-    if (this.visitForm.value.photo) {
-      formData.append('photo', this.visitForm.value.photo);
-    }
-
-    const sub = this.visitService
-      .addVisit(formData)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        }),
-      )
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-          alert('Saved Successfully');
-          this.visitForm.reset();
-          this.photoPreview = null;
-        },
-        error: (err) => {
-          console.log(err);
-          this.error = 'Failed to save visit';
-        },
-      });
-
-    this.subscription.add(sub);
+    this.store.dispatch(
+      submitVisit({
+        customerId: this.customerId,
+        followUpDate: this.visitForm.value.followUpDate ?? '',
+        comment: this.visitForm.value.comment ?? '',
+        purpose: this.visitForm.value.purpose ?? '',
+        photo: this.visitForm.value.photo ?? null,
+      })
+    );
   }
 
   ngOnInit() {
-    const sub = this.store
+    // Get route parameters
+    const subRoute = this.store
       .select(selectRouterParam)
-
       .subscribe((params) => {
         this.customerId = params['id'] ?? '';
       });
+    this.subscription.add(subRoute);
 
-    this.subscription.add(sub);
+    // Reset store status on init
+    this.store.dispatch(resetVisitStatus());
+
+    // Listen for submission success
+    const subSuccess = this.store
+      .select(selectVisitSuccess)
+      .subscribe((success) => {
+        if (success) {
+          this.visitForm.reset();
+          this.photoPreview = null;
+          this.cdr.detectChanges();
+        }
+      });
+    this.subscription.add(subSuccess);
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.store.dispatch(resetVisitStatus());
   }
 }
