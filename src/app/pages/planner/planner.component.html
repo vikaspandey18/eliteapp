@@ -50,7 +50,7 @@
   </div>
 
   @if ((filteredCustomers$ | async)?.length === 0) {
-    <p class="py-8 text-center text-sm text-muted">No customers found</p>
+    <p class="py-8 text-center text-sm text-muted">No Planner found</p>
   }
 
   <div class="space-y-2.5 sm:space-y-3">
@@ -75,7 +75,7 @@
               </div>
             </div>
             <a
-              [routerLink]="['/planner/menu', customer.customerId]"
+              [routerLink]="['/planner/menu', customer.customerId, customer.id]"
               class="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-muted transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
             >
               <!-- Right Arrow Icon -->

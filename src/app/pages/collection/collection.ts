@@ -5,16 +5,23 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectRouterParam } from '../../store/router/router.selectors';
 import { submitCollection, resetCollectionStatus } from './state/collection.actions';
-import { selectCollectionLoading, selectCollectionError, selectCollectionSuccess } from './state/collection.selectors';
+import {
+  selectCollectionLoading,
+  selectCollectionError,
+  selectCollectionSuccess,
+} from './state/collection.selectors';
 import { AsyncPipe } from '@angular/common';
+import { NgToastComponent, TOAST_POSITIONS } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-collection',
-  imports: [ReactiveFormsModule, RouterLink, AsyncPipe],
+  imports: [ReactiveFormsModule, RouterLink, AsyncPipe, NgToastComponent],
   templateUrl: './collection.html',
   styleUrl: './collection.css',
 })
 export class Collection implements OnInit, OnDestroy {
+  
+  TOAST_POSITIONS = TOAST_POSITIONS;
   private store = inject(Store);
   private subscription = new Subscription();
 
@@ -32,24 +39,20 @@ export class Collection implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Get route parameters
-    const subRoute = this.store
-      .select(selectRouterParam)
-      .subscribe((params) => {
-        this.customerId = params['id'] ?? '';
-      });
+    const subRoute = this.store.select(selectRouterParam).subscribe((params) => {
+      this.customerId = params['id'] ?? '';
+    });
     this.subscription.add(subRoute);
 
     // Reset store status on init
     this.store.dispatch(resetCollectionStatus());
 
     // Listen for submission success
-    const subSuccess = this.store
-      .select(selectCollectionSuccess)
-      .subscribe((success) => {
-        if (success) {
-          this.collectionForm.reset();
-        }
-      });
+    const subSuccess = this.store.select(selectCollectionSuccess).subscribe((success) => {
+      if (success) {
+        this.collectionForm.reset();
+      }
+    });
     this.subscription.add(subSuccess);
   }
 
@@ -66,7 +69,7 @@ export class Collection implements OnInit, OnDestroy {
         receiptNo: this.collectionForm.value.receiptNo ?? '',
         followUpDate: this.collectionForm.value.followUpDate ?? '',
         comment: this.collectionForm.value.comment ?? '',
-      })
+      }),
     );
   }
 

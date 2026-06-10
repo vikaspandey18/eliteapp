@@ -13,7 +13,7 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'planner/menu/:id',
+    path: 'planner/menu/:id/:journery',
     component: PlannerMenu,
   },
   {
