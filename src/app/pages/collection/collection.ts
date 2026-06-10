@@ -90,21 +90,12 @@ export class Collection implements OnInit, OnDestroy {
     // Listen for submission success
     const subSuccess = this.store.select(selectCollectionSuccess).subscribe((success) => {
       if (success) {
-        this.toast.success('Collection Added Successfully', 'Success');
         this.collectionForm.reset();
         this.photoPreview = null;
         this.cdr.detectChanges();
       }
     });
     this.subscription.add(subSuccess);
-
-    const subError = this.store.select(selectCollectionError).subscribe((error) => {
-      if (error) {
-        this.toast.danger(error, 'Error');
-      }
-    });
-
-    this.subscription.add(subError);
   }
 
   ngOnDestroy() {

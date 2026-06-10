@@ -84,7 +84,6 @@ export class Visit implements OnInit, OnDestroy {
     // Listen for submission success
     const subSuccess = this.store.select(selectVisitSuccess).subscribe((success) => {
       if (success) {
-        this.toast.success('Visit Added Successfully', 'Success');
         this.visitForm.reset();
         this.photoPreview = null;
         this.cdr.detectChanges();
@@ -92,13 +91,6 @@ export class Visit implements OnInit, OnDestroy {
     });
     this.subscription.add(subSuccess);
 
-    const subError = this.store.select(selectVisitError).subscribe((error) => {
-      if (error) {
-        this.toast.danger(error, 'Error');
-      }
-    });
-
-    this.subscription.add(subError);
   }
 
   ngOnDestroy() {
