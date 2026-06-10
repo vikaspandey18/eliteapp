@@ -20,17 +20,21 @@ export class CollectionEffect {
         // Fetch GPS coordinates first, as they are mandatory
         return this.geoService.getCurrentPosition().pipe(
           switchMap((coords) => {
-            const payload = {
-              customerId: action.customerId,
-              amount: action.amount,
-              receiptNo: action.receiptNo,
-              followUpDate: action.followUpDate,
-              comment: action.comment,
-              latitude: coords.latitude,
-              longitude: coords.longitude,
-            };
+            const formData = new FormData();
+            formData.append('customerId', action.customerId);
+            formData.append('journeryId', action.journeryId);
+            formData.append('amount', action.amount.toString());
+            formData.append('receipt_no', action.receiptNo);
+            formData.append('followUpDate', action.followUpDate);
+            formData.append('comment', action.comment);
+            formData.append('latitude', coords.latitude.toString());
+            formData.append('longitude', coords.longitude.toString());
 
-            return this.collectionService.addCollection(payload).pipe(
+            if (action.photo) {
+              formData.append('photo', action.photo);
+            }
+
+            return this.collectionService.addCollection(formData).pipe(
               map((response) => {
                 if (+response.status === 200) {
                   return submitCollectionSuccess({ response });
