@@ -27,6 +27,7 @@ export class Visit implements OnInit, OnDestroy {
   error$ = this.store.select(selectVisitError);
 
   customerId: string = '';
+  journeryId: string = '';
 
   visitForm = new FormGroup({
     followUpDate: new FormControl(''),
@@ -60,6 +61,7 @@ export class Visit implements OnInit, OnDestroy {
     this.store.dispatch(
       submitVisit({
         customerId: this.customerId,
+        journeryId: this.journeryId,
         followUpDate: this.visitForm.value.followUpDate ?? '',
         comment: this.visitForm.value.comment ?? '',
         purpose: this.visitForm.value.purpose ?? '',
@@ -72,6 +74,7 @@ export class Visit implements OnInit, OnDestroy {
     // Get route parameters
     const subRoute = this.store.select(selectRouterParam).subscribe((params) => {
       this.customerId = params['id'] ?? '';
+      this.journeryId = params?.['journery'] ?? '';
     });
     this.subscription.add(subRoute);
 
