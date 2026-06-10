@@ -1,12 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GeolocationService } from '../../core/services/geolocation.service';
 import { AttendanceService } from '../attendance/services/attendance.service';
 import { NgToastComponent, NgToastService, TOAST_POSITIONS } from 'ng-angular-popup';
+import { Store } from '@ngrx/store';
+import { AsyncPipe } from '@angular/common';
+import { loadEmployee } from './state/employee.actions';
+import { selectEmployee } from './state/employee.selectors';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, NgToastComponent],
+  imports: [RouterLink, NgToastComponent, AsyncPipe],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
@@ -15,11 +19,11 @@ export class HomeComponent implements OnInit {
   private geoService = inject(GeolocationService);
   private attendanceService = inject(AttendanceService);
   private toast = inject(NgToastService);
+  private store = inject(Store);
 
   private route = inject(ActivatedRoute);
 
-  userName = 'Vikas Sharma';
-  userAddress = '123 Elite Street, New York, NY 10001';
+  employee$ = this.store.select(selectEmployee);
   checkedIn = false;
   checkOutDone = false;
 
@@ -30,17 +34,34 @@ export class HomeComponent implements OnInit {
       if (employeeId) {
         localStorage.setItem('employee_id', employeeId);
       }
+
+      if (localStorage.getItem('employee_id')) {
+        this.store.dispatch(loadEmployee());
+      }
     });
 
+    this.checkAndResetDailyStatus();
+  }
+
+  checkAndResetDailyStatus() {
     const today = new Date().toDateString();
     const savedDate = localStorage.getItem('attendanceDate');
-    if (savedDate === today) {
-      this.checkedIn = localStorage.getItem('checkedIn') === 'true';
-      this.checkOutDone = localStorage.getItem('checkOutDone') === 'true';
-    } else {
+    if (savedDate !== today) {
       localStorage.removeItem('checkedIn');
       localStorage.removeItem('checkOutDone');
       localStorage.setItem('attendanceDate', today);
+      this.checkedIn = false;
+      this.checkOutDone = false;
+    } else {
+      this.checkedIn = localStorage.getItem('checkedIn') === 'true';
+      this.checkOutDone = localStorage.getItem('checkOutDone') === 'true';
+    }
+  }
+
+  @HostListener('document:visibilitychange', [])
+  onVisibilityChange() {
+    if (document.visibilityState === 'visible') {
+      this.checkAndResetDailyStatus();
     }
   }
 
@@ -52,6 +73,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkIn() {
+    this.checkAndResetDailyStatus();
     this.toast.info('Loading...', 'Checking In');
     this.geoService.getCurrentPosition().subscribe({
       next: (coords) => {
@@ -80,6 +102,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkOut() {
+    this.checkAndResetDailyStatus();
     this.toast.info('Loading...', 'Checking Out');
     this.geoService.getCurrentPosition().subscribe({
       next: (coords) => {
