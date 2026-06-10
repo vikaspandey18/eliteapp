@@ -63,15 +63,7 @@
         type="date"
         formControlName="followUpDate"
         class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
-        [class.border-red-400]="
-          collectionForm.get('followUpDate')?.invalid && collectionForm.get('followUpDate')?.touched
-        "
       />
-      @if (
-        collectionForm.get('followUpDate')?.invalid && collectionForm.get('followUpDate')?.touched
-      ) {
-        <p class="mt-1 text-xs text-red-500">Follow up date is required</p>
-      }
     </div>
 
     <div>
@@ -91,6 +83,40 @@
       ></textarea>
       @if (collectionForm.get('comment')?.invalid && collectionForm.get('comment')?.touched) {
         <p class="mt-1 text-xs text-red-500">Comment is required</p>
+      }
+    </div>
+
+    <div>
+      <label
+        class="mb-1 block text-[10px] font-medium uppercase tracking-wider text-muted sm:text-[11px]"
+      >
+        Photo
+      </label>
+      <label
+        class="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-white p-6 transition hover:border-primary-400 hover:bg-primary-50"
+      >
+        @if (photoPreview) {
+          <img [src]="photoPreview" alt="Photo preview" class="max-h-48 rounded-lg object-cover" />
+        } @else {
+          <svg
+            class="mb-2 h-8 w-8 text-muted"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+            />
+          </svg>
+          <p class="text-sm text-muted">Tap to upload a photo</p>
+        }
+        <input type="file" accept="image/*" (change)="onPhotoSelected($event)" class="hidden" />
+      </label>
+      @if (collectionForm.get('photo')?.invalid && collectionForm.get('photo')?.touched) {
+        <p class="mt-1 text-xs text-red-500">Photo is required</p>
       }
     </div>
 

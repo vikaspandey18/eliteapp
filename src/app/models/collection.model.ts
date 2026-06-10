@@ -6,4 +6,5 @@ export interface CollectionPayload {
   comment: string;
   latitude: number;
   longitude: number;
+  photo?: string;
 }

@@ -18,7 +18,7 @@
   @if (customer$ | async; as customer) {
     <div class="space-y-3">
       <a
-        [routerLink]="['/visit', customer.customerId]"
+        [routerLink]="['/visit', customer.customerId, journeryId]"
         class="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-1 shadow-sm transition hover:border-primary-200 hover:shadow-md"
       >
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
@@ -56,7 +56,7 @@
       </a>
 
       <a
-        [routerLink]="['/collection', customer.customerId]"
+        [routerLink]="['/collection', customer.customerId, journeryId]"
         class="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-1 shadow-sm transition hover:border-primary-200 hover:shadow-md"
       >
         <div
