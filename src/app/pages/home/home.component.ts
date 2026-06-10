@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, HostListener } from '@angular/core';
+import { Component, inject, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GeolocationService } from '../../core/services/geolocation.service';
 import { AttendanceService } from '../attendance/services/attendance.service';
@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
   private store = inject(Store);
 
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   employee$ = this.store.select(selectEmployee);
   checkedIn = false;
@@ -56,6 +57,7 @@ export class HomeComponent implements OnInit {
       this.checkedIn = localStorage.getItem('checkedIn') === 'true';
       this.checkOutDone = localStorage.getItem('checkOutDone') === 'true';
     }
+    this.cdr.detectChanges();
   }
 
   @HostListener('document:visibilitychange', [])
@@ -83,6 +85,7 @@ export class HomeComponent implements OnInit {
               this.checkedIn = true;
               localStorage.setItem('checkedIn', 'true');
               this.toast.success(res.message || 'Checked In successfully!', 'Success');
+              this.cdr.detectChanges();
             } else {
               this.toast.danger(res.message || 'Failed to Check In', 'Error');
             }
@@ -112,6 +115,7 @@ export class HomeComponent implements OnInit {
               this.checkOutDone = true;
               localStorage.setItem('checkOutDone', 'true');
               this.toast.success(res.message || 'Checked Out successfully!', 'Success');
+              this.cdr.detectChanges();
             } else {
               this.toast.danger(res.message || 'Failed to Check Out', 'Error');
             }
