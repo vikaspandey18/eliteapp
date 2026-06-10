@@ -1,24 +1,32 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, JsonPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AttendanceService } from './services/attendance.service';
 import { AttendanceRecord } from '../../models/attendance.model';
+import { map, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { loadAttendanceStart } from './state/attendance.actions';
+import {
+  selectAttendance,
+  selectErrorAttendance,
+  selectLoadingAttendance,
+} from './state/attendance.selectors';
 
 @Component({
   selector: 'app-attendance',
-  imports: [FormsModule, DatePipe, RouterLink],
+  imports: [FormsModule, DatePipe, RouterLink, AsyncPipe],
   templateUrl: './attendance.component.html',
 })
 export class AttendanceComponent implements OnInit {
-  private attendanceService = inject(AttendanceService);
+  private store = inject(Store);
 
   fromDate: string;
   toDate: string;
 
-  records: AttendanceRecord[] = [];
-  loading = false;
-  error: string | null = null;
+  records$!: Observable<AttendanceRecord[] | []>;
+  loading$!: Observable<boolean>;
+  error$!: Observable<string | null>;
 
   constructor() {
     const now = new Date();
@@ -30,44 +38,42 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchAttendance();
+    this.store.dispatch(loadAttendanceStart({ fromDate: this.fromDate, toDate: this.toDate }));
+
+    this.records$ = this.store.select(selectAttendance);
+    this.loading$ = this.store.select(selectLoadingAttendance);
+    this.error$ = this.store.select(selectErrorAttendance);
   }
 
-  fetchAttendance() {
-    this.loading = true;
-    this.error = null;
-    this.attendanceService.getAttendanceReport(this.fromDate, this.toDate).subscribe({
-      next: (res) => {
-        if (+res.status === 200) {
-          this.records = res.data || [];
-        } else {
-          this.error = res.message || 'Failed to fetch attendance report';
-        }
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err?.error?.message || err?.message || 'Error loading attendance report';
-        this.loading = false;
-      },
-    });
-  }
+  totalPresent$ = this.store
+    .select(selectAttendance)
+    .pipe(map((records) => records.filter((r) => r.status === 'present').length));
 
-  get totalPresent(): number {
-    return this.records.filter((r) => r.status === 'present').length;
-  }
+  totalAbsent$ = this.store
+    .select(selectAttendance)
+    .pipe(map((records) => records.filter((r) => r.status === 'absent').length));
 
-  get totalAbsent(): number {
-    return this.records.filter((r) => r.status === 'absent').length;
-  }
+  totalHalfDay$ = this.store
+    .select(selectAttendance)
+    .pipe(map((records) => records.filter((r) => r.status === 'half-day').length));
 
-  get totalHalfDay(): number {
-    return this.records.filter((r) => r.status === 'half-day').length;
-  }
+  totalHoliday$ = this.store
+    .select(selectAttendance)
+    .pipe(map((records) => records.filter((r) => r.status === 'holiday').length));
 
   private toDateString(d: Date): string {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
+  }
+
+  searchAttendance(): void {
+    this.store.dispatch(
+      loadAttendanceStart({
+        fromDate: this.fromDate,
+        toDate: this.toDate,
+      }),
+    );
   }
 }

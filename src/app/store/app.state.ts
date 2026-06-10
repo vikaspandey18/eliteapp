@@ -13,6 +13,9 @@ import { VisitState } from '../pages/visit/state/visit.state';
 import { CollectionEffect } from '../pages/collection/state/collection.effects';
 import { collectionReducer } from '../pages/collection/state/collection.reducer';
 import { CollectionState } from '../pages/collection/state/collection.state';
+import { AttendanceState } from '../pages/attendance/state/attendance.state';
+import { attendanceReducer } from '../pages/attendance/state/attendance.reducer';
+import { AttendanceEffect } from '../pages/attendance/state/attendance.effects';
 
 export interface AppState {
   customer: CustomerState;
@@ -20,6 +23,7 @@ export interface AppState {
   visit: VisitState;
   collection: CollectionState;
   router: RouterReducerState;
+  attendance: AttendanceState;
 }
 
 export const AppReducer = {
@@ -28,6 +32,13 @@ export const AppReducer = {
   visit: visitReducer,
   collection: collectionReducer,
   router: routerReducer,
+  attendance: attendanceReducer,
 };
 
-export const AppEffect = [CustomerEffect, PlannerEffect, VisitEffect, CollectionEffect];
+export const AppEffect = [
+  CustomerEffect,
+  PlannerEffect,
+  VisitEffect,
+  CollectionEffect,
+  AttendanceEffect,
+];
