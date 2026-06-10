@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
@@ -10,12 +10,13 @@ import { AppEffect, AppReducer } from './store/app.state';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideNgToast } from 'ng-angular-popup';
 import { CustomSerializer } from './store/router/custom-route-serializer';
+import { employeeInterceptor } from './interceptor/employee-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([employeeInterceptor])),
     provideStore(AppReducer),
     provideEffects(AppEffect),
     provideRouterStore({

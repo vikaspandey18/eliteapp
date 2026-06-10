@@ -23,8 +23,10 @@ export class AttendanceComponent implements OnInit {
   constructor() {
     const now = new Date();
     this.toDate = this.toDateString(now);
-    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-    this.fromDate = this.toDateString(oneMonthAgo);
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(now.getDate() - 6);
+
+    this.fromDate = this.toDateString(sevenDaysAgo);
   }
 
   ngOnInit() {
@@ -46,7 +48,7 @@ export class AttendanceComponent implements OnInit {
       error: (err) => {
         this.error = err?.error?.message || err?.message || 'Error loading attendance report';
         this.loading = false;
-      }
+      },
     });
   }
 

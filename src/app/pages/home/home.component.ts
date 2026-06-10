@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GeolocationService } from '../../core/services/geolocation.service';
 import { AttendanceService } from '../attendance/services/attendance.service';
 import { NgToastComponent, NgToastService, TOAST_POSITIONS } from 'ng-angular-popup';
@@ -15,13 +15,23 @@ export class HomeComponent implements OnInit {
   private geoService = inject(GeolocationService);
   private attendanceService = inject(AttendanceService);
   private toast = inject(NgToastService);
-  
+
+  private route = inject(ActivatedRoute);
+
   userName = 'Vikas Sharma';
   userAddress = '123 Elite Street, New York, NY 10001';
   checkedIn = false;
   checkOutDone = false;
 
   ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const employeeId = params['employee_id'];
+
+      if (employeeId) {
+        localStorage.setItem('employee_id', employeeId);
+      }
+    });
+
     const today = new Date().toDateString();
     const savedDate = localStorage.getItem('attendanceDate');
     if (savedDate === today) {
@@ -42,7 +52,7 @@ export class HomeComponent implements OnInit {
   }
 
   checkIn() {
-    this.toast.info('Fetching GPS location...', 'Checking In');
+    this.toast.info('Loading...', 'Checking In');
     this.geoService.getCurrentPosition().subscribe({
       next: (coords) => {
         this.attendanceService.checkIn(coords.latitude, coords.longitude).subscribe({
@@ -56,18 +66,21 @@ export class HomeComponent implements OnInit {
             }
           },
           error: (err) => {
-            this.toast.danger(err?.error?.message || err?.message || 'Failed to hit Check In API', 'Error');
-          }
+            this.toast.danger(
+              err?.error?.message || err?.message || 'Failed to hit Check In API',
+              'Error',
+            );
+          },
         });
       },
       error: (geoErr) => {
         this.toast.danger(geoErr || 'Could not retrieve GPS location', 'GPS Error');
-      }
+      },
     });
   }
 
   checkOut() {
-    this.toast.info('Fetching GPS location...', 'Checking Out');
+    this.toast.info('Loading...', 'Checking Out');
     this.geoService.getCurrentPosition().subscribe({
       next: (coords) => {
         this.attendanceService.checkOut(coords.latitude, coords.longitude).subscribe({
@@ -81,13 +94,16 @@ export class HomeComponent implements OnInit {
             }
           },
           error: (err) => {
-            this.toast.danger(err?.error?.message || err?.message || 'Failed to hit Check Out API', 'Error');
-          }
+            this.toast.danger(
+              err?.error?.message || err?.message || 'Failed to hit Check Out API',
+              'Error',
+            );
+          },
         });
       },
       error: (geoErr) => {
         this.toast.danger(geoErr || 'Could not retrieve GPS location', 'GPS Error');
-      }
+      },
     });
   }
 
