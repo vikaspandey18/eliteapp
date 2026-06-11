@@ -16,31 +16,31 @@ export const routes: Routes = [
   {
     path: 'planner/menu/:id/:journery',
     component: PlannerMenu,
-    canActivate: [checkInGuard],
+    // canActivate: [checkInGuard],
   },
   {
     path: 'planner',
     component: PlannerComponent,
-    canActivate: [checkInGuard],
+    // canActivate: [checkInGuard],
   },
   {
     path: 'attendance',
     component: AttendanceComponent,
-    canActivate: [checkInGuard],
+    // canActivate: [checkInGuard],
   },
   {
     path: 'customer',
     component: Customer,
-    canActivate: [checkInGuard],
+    // canActivate: [checkInGuard],
   },
   {
     path: 'visit/:id/:journery',
     component: Visit,
-    canActivate: [checkInGuard],
+    // canActivate: [checkInGuard],
   },
   {
     path: 'collection/:id/:journery',
     component: Collection,
-    canActivate: [checkInGuard],
+    // canActivate: [checkInGuard],
   },
 ];

@@ -38,10 +38,37 @@ export class HomeComponent implements OnInit {
 
       if (localStorage.getItem('employee_id')) {
         this.store.dispatch(loadEmployee());
+        this.fetchAndUpdateAttendanceStatus();
       }
     });
+  }
 
-    this.checkAndResetDailyStatus();
+  fetchAndUpdateAttendanceStatus() {
+    const employeeId = localStorage.getItem('employee_id');
+    if (!employeeId) {
+      this.checkAndResetDailyStatus();
+      return;
+    }
+
+    this.attendanceService.getCurrentAttendanceStatus().subscribe({
+      next: (res) => {
+        if (+res.status === 200 && res.data) {
+          const today = new Date().toDateString();
+          this.checkedIn = !!res.data.checkedIn;
+          this.checkOutDone = !!res.data.checkOutDone;
+
+          localStorage.setItem('checkedIn', this.checkedIn ? 'true' : 'false');
+          localStorage.setItem('checkOutDone', this.checkOutDone ? 'true' : 'false');
+          localStorage.setItem('attendanceDate', today);
+        } else {
+          this.checkAndResetDailyStatus();
+        }
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.checkAndResetDailyStatus();
+      },
+    });
   }
 
   checkAndResetDailyStatus() {
@@ -63,7 +90,7 @@ export class HomeComponent implements OnInit {
   @HostListener('document:visibilitychange', [])
   onVisibilityChange() {
     if (document.visibilityState === 'visible') {
-      this.checkAndResetDailyStatus();
+      this.fetchAndUpdateAttendanceStatus();
     }
   }
 

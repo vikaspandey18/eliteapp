@@ -25,4 +25,9 @@ export class AttendanceService {
     const url = `${environment.apiUrl}/attendance/getAttendanceReport.php?fromDate=${fromDate}&toDate=${toDate}`;
     return this.http.get<ApiResponse<AttendanceRecord[]>>(url);
   }
+
+  getCurrentAttendanceStatus(): Observable<ApiResponse<{ checkedIn: string | null; checkOutDone: string | null }>> {
+    const url = `${environment.apiUrl}/attendance/currentAttendanceStatus.php`;
+    return this.http.post<ApiResponse<{ checkedIn: string | null; checkOutDone: string | null }>>(url, {});
+  }
 }
