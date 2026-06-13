@@ -7,6 +7,7 @@ import { Customer } from './pages/customer/customer';
 import { Visit } from './pages/visit/visit';
 import { Collection } from './pages/collection/collection';
 import { checkInGuard } from './guards/check-in.guard';
+import { Allactivity } from './pages/allactivity/allactivity';
 
 export const routes: Routes = [
   {
@@ -42,5 +43,9 @@ export const routes: Routes = [
     path: 'collection/:id/:journery',
     component: Collection,
     // canActivate: [checkInGuard],
+  },
+  {
+    path: 'allactivity',
+    component: Allactivity,
   },
 ];
