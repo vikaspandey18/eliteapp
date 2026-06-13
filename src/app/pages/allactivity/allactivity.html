@@ -51,8 +51,12 @@
     />
   </div>
 
-  @if ((filteredCustomers$ | async)?.length === 0) {
-    <p class="py-8 text-center text-sm text-muted">No customers found</p>
+  @if (loading$ | async) {
+    <p class="py-8 text-center text-sm text-muted">Loading All the Acitivity</p>
+  }
+
+  @if ((filteredCustomers$ | async)?.length === 0 && (loading$ | async) === false) {
+    <p class="py-8 text-center text-sm text-muted">No Activity found</p>
   }
 
   <div class="space-y-2.5 sm:space-y-3">
@@ -66,26 +70,17 @@
                   {{ customer.customerName }}
                 </p>
 
-                <p class="truncate text-xs text-muted">
-                  {{ customer.State }}
+                <p class="truncate text-xs pt-1">
+                  {{ customer.purpose }}
                 </p>
               </div>
             </div>
 
-            <a
-              (click)="addPlanner(customer.customerId)"
-              class="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-muted transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
+            <span
+              class="ml-2 flex h-8 shrink-0 items-center justify-center rounded-lg transition hover:bg-primary-50 hover:text-primary-600"
             >
-              <svg
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2.5"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-            </a>
+              {{ customer.dates | date: 'mediumDate' }}
+            </span>
           </div>
         </div>
       }

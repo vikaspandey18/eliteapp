@@ -20,6 +20,9 @@ import { AttendanceEffect } from '../pages/attendance/state/attendance.effects';
 import { EmployeeState } from '../pages/home/state/employee.state';
 import { employeeReducer } from '../pages/home/state/employee.reducer';
 import { EmployeeEffect } from '../pages/home/state/employee.effects';
+import { ActivityState } from '../pages/allactivity/state/activity.state';
+import { activityReducer } from '../pages/allactivity/state/activity.reducer';
+import { ActivityEffect } from '../pages/allactivity/state/activity.effects';
 
 export interface AppState {
   customer: CustomerState;
@@ -29,6 +32,7 @@ export interface AppState {
   router: RouterReducerState;
   attendance: AttendanceState;
   employee: EmployeeState;
+  activity: ActivityState;
 }
 
 export const AppReducer = {
@@ -39,6 +43,7 @@ export const AppReducer = {
   router: routerReducer,
   attendance: attendanceReducer,
   employee: employeeReducer,
+  activity: activityReducer,
 };
 
 export const AppEffect = [
@@ -48,4 +53,5 @@ export const AppEffect = [
   CollectionEffect,
   AttendanceEffect,
   EmployeeEffect,
+  ActivityEffect,
 ];
