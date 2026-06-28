@@ -1,4 +1,4 @@
-import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { NgToastComponent, TOAST_POSITIONS } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-view-collection',
-  imports: [RouterLink, AsyncPipe, DatePipe, CommonModule, NgToastComponent],
+  imports: [RouterLink, AsyncPipe, DatePipe, CurrencyPipe, CommonModule, NgToastComponent],
   templateUrl: './view-collection.html',
   styleUrl: './view-collection.css',
 })
@@ -28,4 +28,5 @@ export class ViewCollection implements OnInit {
     this.error$ = this.store.select(selectCollectionDetailError);
   }
 }
+
 
