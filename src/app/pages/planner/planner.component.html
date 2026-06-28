@@ -49,7 +49,37 @@
     />
   </div>
 
-  @if ((filteredCustomers$ | async)?.length === 0) {
+  <!-- Tab navigation -->
+  <div class="mb-5 flex rounded-xl bg-gray-100 p-1">
+    <button
+      (click)="selectTab('previous')"
+      class="flex-1 rounded-lg py-2 text-center text-xs font-semibold transition duration-150"
+      [ngClass]="activeTab === 'previous' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'"
+    >
+      Previous
+    </button>
+    <button
+      (click)="selectTab('today')"
+      class="flex-1 rounded-lg py-2 text-center text-xs font-semibold transition duration-150"
+      [ngClass]="activeTab === 'today' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'"
+    >
+      Today
+    </button>
+    <button
+      (click)="selectTab('upcoming')"
+      class="flex-1 rounded-lg py-2 text-center text-xs font-semibold transition duration-150"
+      [ngClass]="activeTab === 'upcoming' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'"
+    >
+      Upcoming
+    </button>
+  </div>
+
+  @if (loading$ | async) {
+    <div class="py-8 text-center text-sm text-muted">
+      <div class="inline-block h-6 w-6 animate-spin rounded-full border-2 border-primary-500 border-t-transparent mb-2"></div>
+      <p>Loading plans...</p>
+    </div>
+  } @else if ((filteredCustomers$ | async)?.length === 0) {
     <p class="py-8 text-center text-sm text-muted">No Planner found</p>
   }
 
@@ -71,7 +101,13 @@
                 <p class="truncate text-sm font-semibold text-gray-900 sm:text-sm">
                   {{ customer.customerName }}
                 </p>
-                <p class="truncate text-xs text-muted">{{ customer.customerContact }}</p>
+                <p class="truncate text-xs text-muted">
+                  {{ customer.customerContact }}
+                  @if (customer.journery_date) {
+                    <span class="text-gray-400 mx-1">•</span>
+                    <span class="text-primary-600 font-medium">{{ customer.journery_date | date:'mediumDate' }}</span>
+                  }
+                </p>
               </div>
             </div>
             <a
