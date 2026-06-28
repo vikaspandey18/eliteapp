@@ -1,1 +1,118 @@
-<p>view-activity works!</p>
+<div class="mx-auto max-w-lg px-4 pt-4 pb-24 sm:px-5 sm:pt-6">
+  <div class="flex items-center gap-3">
+    <a
+      routerLink="/allactivity"
+      class="flex h-8 w-8 items-center justify-center rounded-lg text-black transition hover:bg-gray-100 hover:text-gray-900 bg-primary-200"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <div>
+      <h1 class="text-md font-bold text-gray-900 sm:text-xl">Visit Detail</h1>
+    </div>
+  </div>
+
+  <!-- @if (loading$ | async) {
+    <div class="py-8 text-center text-sm text-muted">
+      <p>Loading attendance records...</p>
+    </div>
+  } @else if (error$ | async; as error) {
+    <div class="py-8 text-center text-sm text-red-500">
+      <p>{{ error }}</p>
+    </div>
+  } @else if (records$ | async; as records) {
+    @if (records.length === 0) {
+      <div class="py-8 text-center text-sm text-muted">
+        <p>No attendance records found for this period</p>
+      </div>
+    } @else {
+      <div class="space-y-2">
+        @for (record of records; track record.date) {
+          <div
+            class="rounded-xl border border-gray-100 bg-white px-3.5 py-3 shadow-sm transition hover:border-gray-200 hover:shadow-md sm:px-4 sm:py-3.5"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+                <div
+                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:h-9 sm:w-9"
+                  [class.bg-emerald-50]="record.status === 'present'"
+                  [class.text-emerald-700]="record.status === 'present'"
+                  [class.bg-red-50]="record.status === 'absent'"
+                  [class.text-red-700]="record.status === 'absent'"
+                  [class.bg-amber-50]="record.status === 'half-day'"
+                  [class.text-amber-700]="record.status === 'half-day'"
+                >
+                  @if (record.status === 'present') {
+                    <svg
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  } @else if (record.status === 'absent') {
+                    <svg
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  } @else {
+                    <svg
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  }
+                </div>
+                <div class="min-w-0">
+                  <p class="truncate text-sm font-medium text-gray-900">
+                    {{ record.day }}, {{ record.date | date: 'MMM d, y' }}
+                  </p>
+                  <p class="truncate text-xs text-muted">
+                    {{ record.checkIn }} – {{ record.checkOut }}
+                  </p>
+                </div>
+              </div>
+              <span
+                class="ml-2 shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold sm:px-2.5"
+                [class.bg-emerald-50]="record.status === 'present'"
+                [class.text-emerald-700]="record.status === 'present'"
+                [class.bg-red-50]="record.status === 'absent'"
+                [class.text-red-700]="record.status === 'absent'"
+                [class.bg-amber-50]="record.status === 'holiday'"
+                [class.text-amber-700]="record.status === 'holiday'"
+              >
+                {{
+                  record.status === 'present'
+                    ? 'Present'
+                    : record.status === 'absent'
+                      ? 'Absent'
+                      : 'Holiday'
+                }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  } -->
+</div>
