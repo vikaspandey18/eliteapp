@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class ViewCollection {
+export class ViewCollectionService {
   private http = inject(HttpClient);
 
   getCollectionDetail(id: string): Observable<ApiResponse<CollectionDetailModel>> {
