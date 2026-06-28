@@ -1,13 +1,30 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, filter, map, of, switchMap, tap } from 'rxjs';
 import { loadCollectionDetail, loadCollectionDetailFailed, loadCollectionDetailSuccess } from './collection-detail.actions';
 import { ViewCollectionService } from '../services/view-collection';
+import { routerNavigationAction } from '@ngrx/router-store';
+import { NgToastService } from 'ng-angular-popup';
 
 @Injectable()
 export class CollectionDetailEffect {
   private actions$ = inject(Actions);
   private collectionDetailService = inject(ViewCollectionService);
+  private toast = inject(NgToastService);
+
+  loadCollectionDetailOnNavigation$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(routerNavigationAction),
+      filter((action: any) => {
+        const url = action.payload.routerState.url;
+        return url.startsWith('/viewcollection/');
+      }),
+      map((action: any) => {
+        const id = action.payload.routerState.params.id;
+        return loadCollectionDetail({ id });
+      }),
+    );
+  });
 
   loadCollectionDetail$ = createEffect(() => {
     return this.actions$.pipe(
@@ -24,4 +41,16 @@ export class CollectionDetailEffect {
       }),
     );
   });
+
+  loadCollectionDetailFailedToast$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loadCollectionDetailFailed),
+        tap(({ error }) => {
+          this.toast.danger(error || 'Failed to load collection details', 'Error');
+        }),
+      ),
+    { dispatch: false },
+  );
 }
+
