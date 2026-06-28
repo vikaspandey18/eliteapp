@@ -2,13 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ViewVisit } from '../services/view-visit';
 import { loadVisitDetail, loadVisitDetailFailed, loadVisitDetailSuccess } from './visit.actions';
-import { catchError, filter, map, of, switchMap } from 'rxjs';
+import { catchError, filter, map, of, switchMap, tap } from 'rxjs';
 import { routerNavigationAction } from '@ngrx/router-store';
+import { NgToastService } from 'ng-angular-popup';
 
 @Injectable()
 export class VisitDetailEffect {
   private actions$ = inject(Actions);
   private visitDetailService = inject(ViewVisit);
+  private toast = inject(NgToastService);
 
   loadVisitDetailOnNavigation$ = createEffect(() => {
     return this.actions$.pipe(
@@ -39,7 +41,19 @@ export class VisitDetailEffect {
       }),
     );
   });
+
+  loadVisitDetailFailedToast$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loadVisitDetailFailed),
+        tap(({ error }) => {
+          this.toast.danger(error || 'Failed to load visit details', 'Error');
+        }),
+      ),
+    { dispatch: false },
+  );
 }
+
 
 
 
