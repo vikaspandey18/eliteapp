@@ -8,6 +8,8 @@ import { Visit } from './pages/visit/visit';
 import { Collection } from './pages/collection/collection';
 import { checkInGuard } from './guards/check-in.guard';
 import { Allactivity } from './pages/allactivity/allactivity';
+import { ViewActivity } from './pages/view-activity/view-activity';
+import { ViewCollection } from './pages/view-collection/view-collection';
 
 export const routes: Routes = [
   {
@@ -47,5 +49,16 @@ export const routes: Routes = [
   {
     path: 'allactivity',
     component: Allactivity,
+    // canActivate: [checkInGuard],
+  },
+  {
+    path: 'viewactivity/:id',
+    component: ViewActivity,
+    // canActivate: [checkInGuard],
+  },
+  {
+    path: 'viewcollection/:id',
+    component: ViewCollection,
+    // canActivate: [checkInGuard],
   },
 ];
