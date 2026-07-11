@@ -13,6 +13,11 @@ import { ViewCollection } from './pages/view-collection/view-collection';
 
 export const routes: Routes = [
   {
+    path: 'mobile',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
+  {
     path: '',
     component: HomeComponent,
   },
