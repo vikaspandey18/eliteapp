@@ -16,27 +16,35 @@ export class GeolocationService {
         return;
       }
 
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.ngZone.run(() => {
-            observer.next({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
+      const getPos = (highAccuracy: boolean) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.ngZone.run(() => {
+              observer.next({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              });
+              observer.complete();
             });
-            observer.complete();
-          });
-        },
-        (error) => {
-          this.ngZone.run(() => {
-            observer.error(error.message);
-          });
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        }
-      );
+          },
+          (error) => {
+            if (highAccuracy) {
+              getPos(false);
+            } else {
+              this.ngZone.run(() => {
+                observer.error(error.message);
+              });
+            }
+          },
+          {
+            enableHighAccuracy: highAccuracy,
+            timeout: highAccuracy ? 8000 : 15000,
+            maximumAge: 60000,
+          }
+        );
+      };
+
+      getPos(true);
     });
   }
 }
