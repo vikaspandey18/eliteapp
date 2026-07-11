@@ -23,6 +23,12 @@ import { EmployeeEffect } from '../pages/home/state/employee.effects';
 import { ActivityState } from '../pages/allactivity/state/activity.state';
 import { activityReducer } from '../pages/allactivity/state/activity.reducer';
 import { ActivityEffect } from '../pages/allactivity/state/activity.effects';
+import { VisitDetailState } from '../pages/view-activity/state/visit.state';
+import { visitDetailReducer } from '../pages/view-activity/state/visit.reducer';
+import { VisitDetailEffect } from '../pages/view-activity/state/visit.effects';
+import { CollectionDetailState } from '../pages/view-collection/state/collection-detail.state';
+import { collectionDetailReducer } from '../pages/view-collection/state/collection-detail.reducer';
+import { CollectionDetailEffect } from '../pages/view-collection/state/collection-detail.effects';
 
 export interface AppState {
   customer: CustomerState;
@@ -33,6 +39,8 @@ export interface AppState {
   attendance: AttendanceState;
   employee: EmployeeState;
   activity: ActivityState;
+  visitDetail: VisitDetailState;
+  collectionDetail: CollectionDetailState;
 }
 
 export const AppReducer = {
@@ -44,6 +52,8 @@ export const AppReducer = {
   attendance: attendanceReducer,
   employee: employeeReducer,
   activity: activityReducer,
+  visitDetail: visitDetailReducer,
+  collectionDetail: collectionDetailReducer,
 };
 
 export const AppEffect = [
@@ -54,4 +64,6 @@ export const AppEffect = [
   AttendanceEffect,
   EmployeeEffect,
   ActivityEffect,
+  VisitDetailEffect,
+  CollectionDetailEffect,
 ];
