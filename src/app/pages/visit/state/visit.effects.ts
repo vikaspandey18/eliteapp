@@ -17,16 +17,19 @@ export class VisitEffect {
     return this.actions$.pipe(
       ofType(submitVisit),
       switchMap((action) => {
-        // Fetch GPS coordinates first, as they are mandatory
         return this.geoService.getCurrentPosition().pipe(
+          catchError((geoErr) => {
+            // console.warn('GPS coordinates not fetched, using fallback (0,0):', geoErr);
+            return of({ latitude: 0, longitude: 0 });
+          }),
           switchMap((coords) => {
             const formData = new FormData();
             formData.append('customerId', action.customerId);
             formData.append('followUpDate', action.followUpDate);
             formData.append('comment', action.comment);
             formData.append('purpose', action.purpose);
-            formData.append('latitude', coords.latitude.toString());
-            formData.append('longitude', coords.longitude.toString());
+            formData.append('latitude', coords.latitude === 0 ? '000' : coords.latitude.toString());
+            formData.append('longitude', coords.longitude === 0 ? '000' : coords.longitude.toString());
             
             if (action.photo) {
               formData.append('photo', action.photo);
@@ -45,8 +48,8 @@ export class VisitEffect {
               })
             );
           }),
-          catchError((geoErr) => {
-            return of(submitVisitFailure({ error: 'GPS coordinates are mandatory to submit a visit: ' + (geoErr || 'unknown error') }));
+          catchError((err) => {
+            return of(submitVisitFailure({ error: 'Submission failed: ' + (err?.message || err || 'unknown error') }));
           })
         );
       })
